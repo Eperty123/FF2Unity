@@ -1,14 +1,18 @@
-﻿using System.IO;
+﻿using FF2Unity.Utility;
+using System.IO;
 using System.Windows.Forms;
 
 namespace FF2Unity.Definition
 {
+    /// <summary>
+    /// The class for parsing a file as a Fusionfall cache file.
+    /// </summary>
     public class Cache
     {
         #region Private Variables
         private string _CacheFile;
         private string _CacheName;
-        private string _CacheFolder;
+        private string _CacheFolderName;
 
         private bool _IsCacheValid;
         private FileInfo _FileInfo;
@@ -17,7 +21,7 @@ namespace FF2Unity.Definition
         #region Public Variables
         public string CacheFile { get => _CacheFile; protected set => _CacheFile = value; }
         public string CacheName { get => _CacheName; protected set => _CacheName = value; }
-        public string CacheFolder { get => _CacheFolder; protected set => _CacheFolder = value; }
+        public string CacheFolderName { get => _CacheFolderName; protected set => _CacheFolderName = value; }
         public bool IsCacheValid { get => _IsCacheValid; protected set => _IsCacheValid = value; }
         public FileInfo FileInfo { get => _FileInfo; protected set => _FileInfo = value; }
         #endregion
@@ -28,27 +32,36 @@ namespace FF2Unity.Definition
 
         }
 
-        public Cache(string file)
+        public Cache(string file, string cacheFolder)
         {
-            LoadCache(file);
+            LoadCache(file, cacheFolder);
         }
         #endregion
 
         #region Public Methods
-        public void LoadCache(string file)
+        /// <summary>
+        /// Load and parse a file as a <see cref="Cache"/>.
+        /// </summary>
+        /// <param name="file">The input file.</param>
+        /// <param name="cacheFolder">The cache folder the file is out in.</param>
+        public void LoadCache(string file, string cacheFolder)
         {
             if (File.Exists(file))
             {
                 FileInfo fi = new FileInfo(file);
                 CacheFile = file;
                 CacheName = fi.Name;
-                CacheFolder = fi.DirectoryName;
+                CacheFolderName = this.GetCacheFolderName(cacheFolder);
 
                 IsCacheValid = ValidateCache();
                 FileInfo = fi;
             }
         }
 
+        /// <summary>
+        /// Make the cache file Unity-readable.
+        /// </summary>
+        /// <param name="directory">The directory the cache file should be put in.</param>
         public void ToUnity(string directory)
         {
             if (!IsCacheValid || !Directory.Exists(directory))
@@ -66,6 +79,10 @@ namespace FF2Unity.Definition
             }
         }
 
+        /// <summary>
+        /// Validate the cache file.
+        /// </summary>
+        /// <returns>Returns true if it is otherwise false.</returns>
         protected bool ValidateCache()
         {
             bool result = false;
@@ -77,9 +94,13 @@ namespace FF2Unity.Definition
             return result;
         }
 
+        /// <summary>
+        /// Return the cache file as a string.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return $"Found cache file: {CacheName} in folder: {CacheFolder}.";
+            return $"Found cache file: {CacheName} in folder: {CacheFolderName}.";
         }
         #endregion
     }
