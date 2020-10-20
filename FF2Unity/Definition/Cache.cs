@@ -51,7 +51,7 @@ namespace FF2Unity.Definition
                 FileInfo fi = new FileInfo(file);
                 CacheFile = file;
                 CacheName = fi.Name;
-                CacheFolderName = this.GetCacheFolderName(cacheFolder);
+                CacheFolderName = fi.DirectoryName.GetCacheFolderName(cacheFolder);
 
                 IsCacheValid = ValidateCache();
                 FileInfo = fi;

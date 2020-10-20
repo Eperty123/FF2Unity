@@ -14,5 +14,16 @@ namespace FF2Unity.Utility
         {
             return cache.CacheFolderName.Replace(cacheFolder + "\\", "");
         }
+
+        /// <summary>
+        /// Get the cache's cache folder name.
+        /// </summary>
+        /// <param name="cache">The cache to use.</param>
+        /// <param name="cacheFolder">The input cache folder the cache file is found in.</param>
+        /// <returns></returns>
+        public static string GetCacheFolderName(this string cache, string cacheFolder)
+        {
+            return cache.Replace(cacheFolder + "\\", "");
+        }
     }
 }
